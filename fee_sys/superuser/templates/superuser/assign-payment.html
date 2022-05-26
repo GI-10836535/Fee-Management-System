@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+        {% load static %}
+        <script src="{% static 'superuser/js/script.js' %}"></script>
+      
+    </head>
+    <body>
+        <h1>Hello, world</h1>
+
+        <form action="" method="post" id="" name="">
+            {% csrf_token %}
+            {% comment %} <input type='text' name='branch' value="" id="branch" > {% endcomment %}
+
+            <select id="branch" name="branch" required >
+                <option selected>Branch</option>
+                {% for branch in branches %}
+                <option value="{{ branch.name }}" id="{{ branch.id }}">{{ branch.name }}</option>
+                {% endfor %}
+              </select>
+<br>
+            <select id="member_category" name="member_category" required >
+              <option selected>Member Category</option>
+              {% for member_category in member_categories %}
+              <option value="{{ member_category.category }}" id="{{ member_category.id }}">{{ member_category.category }}</option>
+              {% endfor %}
+            </select>
+
+            <br>
+
+            <select id="group" name="group" required >
+                <option selected>Group</option>
+                {% for group in groups %}
+                <option value="{{ group.group }}" id="{{ group.id }}">{{ group.group }}</option>
+                {% endfor %}
+            </select>
+
+            <br>
+            <select id="subgroup" name="subgroup" required >
+                <option selected>Subgroup</option>
+                {% for subgroup in subgroups %}
+                <option value="{{ subgroup.subgroup }}" id="{{ subgroup.id }}">{{ subgroup.subgroup }}</option>
+                {% endfor %}
+            </select>
+            <br>
+
+            <select id="fee_type" name="fee_type" required >
+            <option selected>Fee Type</option>
+            {% for fee_type in fee_type %}
+              <option value="{{ fee_type.id }}" id="{{ fee_type.id }}">{{ fee_type.fee_type }}</option>
+            {% endfor %}
+            </select>
+
+            <input type="text" class="fee_items" id="fee_type{{forloop.counter}}" name="fee_items[]" disabled value="10">
+            <label for="fee_type">{{ fee_items.fee_items }}</label>
+
+
+
+            <br>
+          {% comment %} <select id="fee_description" name="fee_description">
+            <option selected>Fee Description</option>
+            {% for fee_description in fee_description %}
+              <option value="{{ fee_description.id }}" >{{ fee_description.fee_description }}</option>
+            {% endfor %}
+          </select> {% endcomment %}
+
+{% comment %} <br>
+          <label for='fee_items'>Select Fee Items</label>
+          {% for fee_items in fee_items %}
+              <input type="checkbox" class="fee_items" id="fee_type{{forloop.counter}}" name="fee_items[]" value={{ fee_items.id }} onchange="checkFunction()">
+              <label for="fee_type">{{ fee_items.fee_items }}</label>
+          {% endfor %}
+<br>
+            <label for="fee_items">Enter Fee amount</label>
+            {% comment %} <input type='text' name='fee_items' value="" id="fee_items" required> {% endcomment %}
+            {% comment %} {% for fee_items in fee_items %}
+            <div id="item_amount{{forloop.counter}}" style="display: none">
+             <p>{{ fee_items.fee_items }}: <input type="text" class="amount" id="amount{{forloop.counter}}" name="items_amount[]"></p>
+            </div>
+          {% endfor %}  {% endcomment %}
+       
+            <input type="submit" value="Submit">
+        </form> 
+
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+        
+    </body>
+</html>

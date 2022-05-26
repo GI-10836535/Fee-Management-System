@@ -6,9 +6,13 @@
     <body>
         <h1>Hello, world</h1>
 
-       <form action="" method="post">
+       <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type='text' name='fee_type' value="" id="fee_type">
+            <input type='text' name='signers_name' value="" id="signers_name">
+            <input type='file' name='signature' value="" id="signature">
+            <input type='file' name='logo' value="" id="logo">
+            <input type='tel' name='contact' value="" id="contact">
+            <input type='email' name='email' value="" id="email">
             <input type="submit" value="Submit">
         </form> 
 
