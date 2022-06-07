@@ -1,0 +1,29 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+<a href="/create-fee-items"><button>Add Fee Item</button></a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fee Type</th>
+            <th>Fee Items</th>
+            <th>Action</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for fee_item in fee_items %}
+        <tr>
+            <td>{{fee_item.fee_type}}</td>
+            <td>{{fee_item.fee_items}}</td>
+            <td><a href="{% url 'superuser:editFeeItem' id=fee_item.id %}"><button type="button">Edit</button></a></td>
+            <td><a href="{% url 'superuser:deleteFeeItem' id=fee_item.id %}"><button type="button">Delete</button></a></td>
+
+        </tr>
+        {% endfor %} 
+    </tbody>
+</table>
+
+  
+{% endblock %}

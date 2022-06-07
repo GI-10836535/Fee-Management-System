@@ -1,0 +1,29 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+<a href="/create-fee-type"><button>Add Fee Type</button></a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fee Type</th>
+            <th>Created On</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fee_type in fee_types %}
+        <tr>
+           
+            <td>{{fee_type.fee_type}}</td>
+            <td>{{fee_type.date_created}}</td>
+            <td><a href="{% url 'superuser:editFeeType' id=fee_type.id %}"><button type="button">Edit</button></a></td>
+            <td><a href="{% url 'superuser:deleteFeeType' id=fee_type.id %}"><button type="button">Delete</button></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+<a href="/assign-payment"><button>Assign Payment</button></a>
+
+        <form action="" method="get" id="viewPaymentForm" name="" data-invoice-url="{% url 'superuser:ajax_load_invoice' %}" novalidate>
+            {% csrf_token %}
+
+            {{ my_filter.form }}
+
+            <input type="submit" value="Search">
+        </form> 
+
+
+        <hr>
+        <hr>
+        <input type="checkbox" name="" id="check_all" onClick="toggle(this)"><label>Check all</label>
+        <button>Delete selected</button>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Member</th>
+            <th>Details</th>
+            <th>Fee Type</th>
+            <th>Payment Details</th>
+            <th>Created On</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+         {% for detail in assigned_payments %}
+        <tr>
+            <td><input type="checkbox" name="foo" id="check{{forloop.counter0}}"></td>
+            <td>{{detail.member}}</td>
+            <td>
+                <ul>
+                    <li>Branch: {{detail.branch}}</li>
+                    <li>Member Category: {{detail.member_category}}</li>
+                    <li>Group: {{detail.group}}</li>
+                    <li>Subgroup: {{detail.subgroup}}</li>
+                </ul>
+            </td>
+            <td>{{detail.fee_type}}</td>
+            <td>
+                <ul>
+                    <li>Total Invoice: GHC {{detail.total_invoice}}</li>
+
+                    {% if detail.account_status == 'subscriber' %}
+                    <li>Account Status: Subscriber </li>
+                    {% else %}
+                    <li>Account Status: Non-Subscriber</li>
+                    {% endif %}
+
+                    <li>Payment Deadline: {{detail.deadline}}</li>
+                    <li>Account Expiry: {{detail.end_date}}</li>
+                </ul>
+            </td>
+            <td>{{detail.date_created}}</td>
+            <td><a href="{% url 'superuser:makePayments' detail.pk %}"><button type="button">Make Payment</button></a></td>
+            {% comment %} <td><a href="{% url 'superuser:deletePaymentDuration' id=detail.id %}"><button type="button">Delete</button></a></td> {% endcomment %}
+        </tr>
+       {% endfor %} 
+    </tbody>
+</table>
+
+
+{% if assigned_payments.has_previous %}  
+<a href="?page=1"> First </a>
+<a href="?page={{ assigned_payments.previous_page_number}}"> Previous </a>
+
+{% endif %}  
+
+Page {{ assigned_payments.number }} of {{ assigned_payments.paginator.num_pages }}
+
+{% if assigned_payments.has_next %}  
+<a href="?page={{assigned_payments.next_page_number}}"> Next </a>
+<a href="?page={{ assigned_payments.paginator.num_pages}}"> Last </a>
+
+{% endif %}  
+
+    
+{% endblock %}

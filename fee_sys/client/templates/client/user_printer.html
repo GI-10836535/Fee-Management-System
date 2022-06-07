@@ -1,0 +1,195 @@
+{% extends 'client/base.html' %}
+
+{% block style %}
+
+body{
+    {% comment %} background-color: #F6F6F6;  {% endcomment %}
+    margin: 0;
+    padding: 0;
+}
+h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    padding: 0;
+}
+p{
+    margin: 0;
+    padding: 0;
+} 
+.container{
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.brand-section{
+   background-color: #0d1033;
+   padding: 10px 40px;
+}
+.logo{
+    width: 50%;
+}
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+}
+.col-6{
+    width: 50%;
+    flex: 0 0 auto;
+}
+.text-white{
+    color: #fff;
+}
+.company-details{
+    float: right;
+    text-align: right;
+    
+}
+.body-section{
+    padding: 16px;
+    {% comment %} border: 1px solid gray; {% endcomment %}
+}
+.heading{
+    font-size: 20px;
+    margin-bottom: 08px;
+}
+.sub-heading{
+    color: #262626;
+    margin-bottom: 05px;
+}
+table{
+    background-color: #fff;
+    width: 100%;
+    border-collapse: collapse;
+}
+table thead tr{
+    border: 1px solid #111;
+    background-color: #f2f2f2;
+}
+table td {
+    vertical-align: middle !important;
+    text-align: center;
+}
+table th, table td {
+    padding-top: 08px;
+    padding-bottom: 08px;
+}
+.table-bordered{
+    box-shadow: 0px 0px 5px 0.5px gray;
+}
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.text-right{
+    text-align: end;
+}
+.w-20{
+    width: 20%;
+}
+.float-right{
+    float: right;
+} 
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="brand-section" >
+        <div class="row" style="display: flex; flex-direction: column">
+            <div class="col-6">
+                {% comment %} <h1 class="text-white">FABCART</h1> {% endcomment %}
+                <img src={{ company.logo.path }} height="50px" width="50px">
+            </div>
+            <div class="col-6">
+                <div class="company-details" style="margin-top: -50px;">
+                    <p class="text-white">{{ company.company_name }}</p>
+                    <p class="text-white">{{ company.email }}</p>
+                    <p class="text-white">+{{ company.contact }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-sections">
+        <div class="row">
+            <div class="col-6">
+                <h4 class="heading">Invoice No: {{ detail.invoice_no }}</h4>
+                <p class="sub-heading">Order Date: {{ detail.date_created }} </p>
+                <p class="sub-heading">Paid For: {{ detail.member }} </p>
+                <p class="sub-heading">User Type: {{ detail.user_type }} </p>
+                <p class="sub-heading">Fee Type: {{ detail.fee_type }} </p>
+            </div>
+            <div class="col-6">
+                <p class="sub-heading">Email Address:  {{ detail.email_address }}</p>
+                <p class="sub-heading">City,State,Pincode:  Accra </p>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="body-section">
+        {% comment %} <h3 class="heading">Ordered Items</h3> {% endcomment %}
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th>Fee Item</th>
+                    <th class="w-20">Price(GHc)</th>
+                    <th class="w-20">Total(GHc)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for key, value in data.items %}
+                <tr>
+                    <td> {{ key }} </td> 
+                    <td> {{ value }} </td>
+                    <td> {{ value }} </td>
+                </tr>
+            {% endfor %}
+
+                <tr>
+                    <td colspan="2" class="text-right">Sub Total (GHc)</td>
+                    <td> {{ invoice.total_amount }} </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Grand Total (GHc)</td>
+                    <td> {{ invoice.total_amount }} </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Balanced Paid (GHc)</td>
+                    <td> {{ detail.amount_paid }} </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right">Arrears (GHc)</td>
+                    {% if detail.arrears %}
+                    <td> {{ detail.arrears }} </td>
+                    {% else %}
+                    <td>None</td>
+                    {% endif %}
+
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        {% if detail.payment_status == 'part' %}
+        <h3 class="">Payment Status: Part </h3>
+        {% else %}
+        <h3 class="">Payment Status: Full </h3>
+        {% endif %}
+        {% if detail.arrears %}
+        <h3 class="">Arrears: GHc {{ detail.arrears }}</h3>
+        {% else %}
+        <h3 class="">Arrears: None</h3>
+        {% endif %}
+
+        <h3 class="">Amount Paid: {{ detail.amount_paid }}</h3>
+        <h3 class="heading">Payment Mode: Cash on Delivery</h3>
+    </div>
+
+    <div class="body-section" style="float: right;">
+        <p>&copy; Copyright 2022 - Akwaaba Solutions . All rights reserved. 
+            <a href="https://www.akwaabasolutions.com/" class="float-right">www.akwaabasolutions.com</a>
+        </p>
+    </div>      
+</div>      
+
+
+{% endblock %}

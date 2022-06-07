@@ -1,0 +1,85 @@
+{% extends 'client/base.html' %}
+ 
+{% block content %} 
+
+{% comment %} <a href="/assign-payment"><button>Assign Payment</button></a> {% endcomment %}
+
+        {% comment %} <form action="" method="get" id="viewPaymentForm" name="" data-invoice-url="{% url 'superuser:ajax_load_invoice' %}" novalidate>
+            {% csrf_token %}
+
+            {{ my_filter.form }}
+
+            <input type="submit" value="Search">
+        </form>  {% endcomment %}
+
+
+        <hr>
+        <hr>
+        <input type="checkbox" name="" id="check_all" onClick="toggle(this)"><label>Check all</label>
+        <button>Delete selected</button>
+        <br>
+        <br>
+        Username: {{ user.member }}<br>
+        {% if user.account_status == 'subscriber'%}
+        Account status: Subscriber
+        {% else %}
+        Account status: Non Subscriber
+        {% endif %}
+        <br>
+        <br>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Order ID</th>
+            <th>Fee Type</th>
+            <th>Payment Details</th>
+            <th>Created On</th>
+            <th></th>
+        </tr>
+    </thead>
+     <tbody>
+         {% for detail in payments %}
+        <tr>
+            <td><input type="checkbox" name="foo" id="check{{forloop.counter0}}"></td>
+            <td>{{ detail.invoice_no }}</td>
+            <td>{{detail.fee_type}}</td>
+           <td>
+                <ul>
+                    <li>Total Invoice: GHc {{ detail.total_amount_due }}</li>
+                    <li>Amount Paid: GHc {{ detail.amount_paid }}</li>
+                    <li>Arrears: GHc {{ detail.arrears }}</li>
+                    <li>Expires On: {{ detail.end_date }}</li>
+                    {% if payment.end_date < today %}
+                    <li>Account status: Expired</li>
+                    {% else %}
+                    <li>Account status: Active</li>
+                    {% endif %}
+                </ul> 
+            </td>
+            <td>{{detail.date_created}}</td>
+            
+            <td><a href="{% url 'client:invoice_details_view' detail.pk %}"><button type="button">Download</button></a></td>
+        </tr>
+       {% endfor %} 
+    </tbody> 
+</table>
+
+
+{% comment %} {% if assigned_payments.has_previous %}  
+<a href="?page=1"> First </a>
+<a href="?page={{ assigned_payments.previous_page_number}}"> Previous </a>
+
+{% endif %}  
+
+Page {{ assigned_payments.number }} of {{ assigned_payments.paginator.num_pages }}
+
+{% if assigned_payments.has_next %}  
+<a href="?page={{assigned_payments.next_page_number}}"> Next </a>
+<a href="?page={{ assigned_payments.paginator.num_pages}}"> Last </a>
+
+{% endif %}  
+
+     {% endcomment %}
+
+{% endblock %}

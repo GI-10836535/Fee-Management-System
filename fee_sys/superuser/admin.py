@@ -3,7 +3,7 @@ from .models import *
 
 
 # Register your models here.
-@admin.register( FeeType, FeeItems, FeeDescription, Currency, SetInvoiceDetails, Invoice, AssignPaymentDuration)
+@admin.register( AssignPeriod, FeeType, FeeItems, FeeDescription, Currency, InvoiceDetails, Invoice, AssignPaymentDuration, MakePayment)
 
 class AppAdmin(admin.ModelAdmin):
     pass

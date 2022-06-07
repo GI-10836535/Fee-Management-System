@@ -8,8 +8,9 @@
 
        <form action="" method="post">
             {% csrf_token %}
-            <input type='text' name='currency' value="" id="currency" placeholder="currency" required>
-            <input type="submit" value="Submit">
+            <input type='text' name='currency' value="" id="currency" placeholder="Enter currency..." required>
+            <input type="submit" value="Submit"><br>
+            <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
         </form> 
  
     </body>

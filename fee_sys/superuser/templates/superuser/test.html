@@ -1,0 +1,14 @@
+
+{% for fee_items in fee_items %}
+<input type="checkbox" class="fee_items" id="fee_type{{forloop.counter}}" name="{{ fee_items.fee_items }}" value="{{ fee_items.id }}" onchange="checkFunction()">
+<label for="fee_type">{{ fee_items.fee_items }}</label>
+{% endfor %}
+
+<br>
+
+<label for="fee_items">Enter Fee amount</label>
+{% for fee_items in fee_items %}
+<div id="item_amount{{forloop.counter}}" style="display: none">
+ <p>{{ fee_items.fee_items }}: <input type="text" class="amount" id="amount{{forloop.counter}}" name="items_amount[]"></p>
+</div>
+{% endfor %}

@@ -1,0 +1,20 @@
+{% extends 'client/base.html' %}
+ 
+{% block content %}
+
+<p>Total amount assigned: GHc {{ total_invoice }} </p>
+<p>Total amount paid: GHc {{ total_payments }} </p>
+<p>Total amount in arrears: GHc {{ total_arrears }} </p>
+
+<ul>
+    <li><a href="view-assigned-payments/">Assigned Payments</a></li>
+    <li><a href="view-payments/">Payment Records</a></li>
+    {% comment %} <li><a href="/view-fee-description">Fee Description</a></li>
+    <li><a href="/view-invoice">Invoice Details</a></li>
+    <li><a href="/view-payment-details">View Assigned Details</a></li>
+    <li><a href="/view-invoice-details">Company Details</a></li>
+    <li><a href="/view-currency">Currency</a></li>
+    <li><a href="/view-payments">View Payments</a></li> {% endcomment %}
+</ul>
+
+{% endblock %}

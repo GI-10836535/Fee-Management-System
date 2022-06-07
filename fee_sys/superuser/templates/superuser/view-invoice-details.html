@@ -1,0 +1,31 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+<a href="/set-invoice-details"><button>Set Invoice Details</button></a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Signers Name</th>
+            <th>Contact</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for invoice_detail in invoice_details %}
+        <tr>
+            <td>{{invoice_detail.signers_name}}</td>
+            <td>{{invoice_detail.contact}}</td>
+            <td>{{invoice_detail.email}}</td>
+            {% comment %} <td><a href="{% url 'superuser:invoice_details_view' invoice_detail.pk %}"><button type="button">View</button></a></td> {% endcomment %}
+            <td><a href="{% url 'superuser:editInvoiceDetails' id=invoice_detail.id %}"><button type="button">Edit</button></a></td>
+            <td><a href="{% url 'superuser:deleteInvoiceDetails' id=invoice_detail.id %}"><button type="button">Delete</button></a></td>
+
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+    
+{% endblock %}

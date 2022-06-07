@@ -1,6 +1,10 @@
 from django.db import models
 from django.forms import ModelForm
 from django import forms
+from datetime import date
+from django.utils import timezone
+# from .views import increment_invoice_number
+
 
 # Create your models here.
 
@@ -10,10 +14,7 @@ class FeeType(models.Model):
     date_created = models.DateTimeField(auto_now_add= True)
 
     def __str__(self):
-        return self.fee_type
-
-
-
+        return f'{self.fee_type}'
 
 
 class FeeItems(models.Model):
@@ -24,7 +25,7 @@ class FeeItems(models.Model):
 
 
     def __str__(self):
-        return f'{self.fee_type}- {self.fee_items}'
+        return f'{self.fee_items}'
 
 
 class FeeDescription(models.Model):
@@ -53,12 +54,14 @@ class Invoice(models.Model):
     member_category = models.CharField(max_length= 100)
     group = models.CharField(max_length= 100)
     subgroup = models.CharField(max_length= 100)
-    fee_type = models.ForeignKey(FeeType, on_delete= models.CASCADE)
-    fee_description = models.ForeignKey(FeeDescription, on_delete= models.CASCADE)
-    fee_items = models.ForeignKey(FeeItems, on_delete= models.CASCADE)
+    fee_type = models.ForeignKey(FeeType, on_delete= models.SET_NULL, null=True)
+    fee_description = models.ForeignKey(FeeDescription, on_delete= models.SET_NULL, null=True)
+    fee_items = models.ManyToManyField(FeeItems)
     items_amount = models.CharField(max_length= 100)
-    total_amount = models.IntegerField(default=0)
- 
+    total_amount = models.IntegerField(default=0, null=True)
+    date_created = models.DateTimeField(auto_now_add= True)
+
+
 
     def __str__(self):
         return f'{self.branch}, {self.member_category}, {self.group}, {self.subgroup}, {self.fee_type}, {self.fee_description},'
@@ -66,100 +69,12 @@ class Invoice(models.Model):
 
 
 
-# class InvoiceType(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     branch = models.CharField(max_length= 100)
-#     member_category = models.CharField(max_length= 100)
-#     group = models.CharField(max_length= 100)
-#     subgroup = models.CharField(max_length= 100)
-#     fee_type = models.ForeignKey(FeeType, on_delete= models.CASCADE)
-#     fee_description = models.ForeignKey(FeeDescription, on_delete= models.CASCADE)
- 
-
-#     def __str__(self):
-#         return f'{self.branch}, {self.member_category}, {self.group}, {self.subgroup}, {self.fee_type}, {self.fee_description},'
-
-
-# class InvoiceItems(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     fee_items = models.ForeignKey(FeeItems, on_delete= models.CASCADE)
-#     items = models.CharField(max_length= 100, default="Home")
-#     items_amount = models.IntegerField(default=0)
-#     total_amount = models.IntegerField(default=0)
-
-#     def __str__(self):
-#         return f"{self.total_amount}"
-
-
-
-
-# class Invoice(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     branch = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     member_category = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     group = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     subgroup = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     fee_type = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     fee_description = models.ForeignKey(InvoiceType, on_delete= models.CASCADE)
-#     fee_items = models.ForeignKey(InvoiceItems, on_delete= models.CASCADE)
-#     items = models.ForeignKey(InvoiceItems, on_delete= models.CASCADE)
-#     items_amount = models.ForeignKey(InvoiceItems, on_delete= models.CASCADE)
-#     total_amount = models.ForeignKey(InvoiceItems, on_delete= models.CASCADE)
-
-#     def __str__(self):
-#         return f'{self.branch}, {self.member_category}, {self.group}, {self.subgroup}, {self.fee_type}, {self.fee_description},'
-
-
-
-
-
-
-
-
-class SelectedValue(models.Model):
-    id = models.AutoField(primary_key=True)
-    selected_value = models.IntegerField(null=True, default=0)
-
-    def __str__(self):
-        return f"{self.selected_value}"
-
-
-
-
-
-
-# class CreateInvoiceForm(ModelForm):
-
-#      class Meta:
-#         model = Invoice
-#         fields = ['branch','member_category','group','subgroup','fee_type','fee_description','items_amount']
-
-#         widgets = {
-#             # from API
-#         'branch': forms.ChoiceField(),
-#         'member_category': forms.ChoiceField(),
-#         'group': forms.ChoiceField(),
-#         'subgroup': forms.ChoiceField(),
-
-#         'fee_type': forms.ChoiceField(choices = FeeType.objects.all(),  label="", initial='Choose fee type/category', widget=forms.Select(), required=True),
-#         'fee_description': forms.ChoiceField(),
-#         'items_amount': forms.TextInput(attrs={'placeholder': 'Enter amount...'}),
-#             }  
-
-
-
-
-
-
-
-
-
-
 # logo and signature upload
 
-class SetInvoiceDetails(models.Model):
+class InvoiceDetails(models.Model):
     id = models.AutoField(primary_key=True)
     signers_name = models.CharField(max_length= 500)
+    company_name = models.CharField(max_length= 500, default="Akwaaba Solutions Agency", null=True)
     signature = models.ImageField(blank=True, null=True, upload_to='signature-uploads/', default='')
     logo = models.ImageField(blank=True, null=True, upload_to='logo-uploads/', default='')
     contact = models.CharField(max_length= 500)
@@ -171,25 +86,65 @@ class SetInvoiceDetails(models.Model):
 
 
 
+class AssignPeriod(models.Model):
+    name = models.CharField(max_length= 100)
 
+    def __str__(self):
+        return f'{self.name}'
 
 
 class AssignPaymentDuration(models.Model):
     id = models.AutoField(primary_key=True)
-    branch = models.CharField(max_length= 100)
-    member_category = models.CharField(max_length= 100)
-    group = models.CharField(max_length= 100)
-    subgroup = models.CharField(max_length= 100)
-    member = models.CharField(max_length= 100, default= None)
-    fee_type = models.ForeignKey(FeeType, on_delete= models.CASCADE)
-    total_invoice = models.IntegerField(blank=True)
-    install_days = models.IntegerField(blank=True, default=0)
-    install_amount = models.IntegerField()
-    set_date =  models.DateField(blank=True)
-    start_date =  models.DateField(blank=True)
-    end_date =  models.DateField(blank=True)
+    branch = models.CharField(max_length= 100, null=True)
+    member_category = models.CharField(max_length= 100, null=True)
+    group = models.CharField(max_length= 100, null=True)
+    subgroup = models.CharField(max_length= 100, null=True)
+    member = models.CharField(max_length= 100, null=True)
+    fee_type = models.ForeignKey(FeeType, on_delete= models.SET_NULL, null=True)
+    fee_description = models.ForeignKey(FeeDescription, on_delete= models.SET_NULL, null=True)
+    total_invoice = models.IntegerField(blank=True, null=True)
+    install_range = models.CharField(max_length= 100, default= None)
+    install_period = models.IntegerField(blank=True, null=True)
+    install_amount = models.IntegerField(blank=True, null=True)
+    set_pay_date =  models.DateField(blank=True, null=True, default=timezone.now)
+    start_date =  models.DateField(blank=True, null=True)
+    end_date =  models.DateField(blank=True, null=True)
+    deadline = models.DateField(blank=True, null=True)
     account_status = models.CharField(max_length= 100)
+    date_created = models.DateTimeField(auto_now_add= True)
+
 
     def __str__(self):
-        return f'{self.branch}, {self.member_category}, {self.group}, {self.subgroup}, {self.total_invoice}'
-      
+        return f'{self.member} - {self.total_invoice}, {self.fee_type}'
+
+
+class MakePayment(models.Model):
+    id = models.AutoField(primary_key=True)
+    branch = models.CharField(max_length= 100, null=True)
+    member_category = models.CharField(max_length= 100, null=True)
+    group = models.CharField(max_length= 100, null=True)
+    subgroup = models.CharField(max_length= 100, null=True)
+    member = models.CharField(max_length= 100, null=True)
+    fee_type = models.ForeignKey(FeeType, on_delete= models.SET_NULL, null=True)
+    fee_description = models.ForeignKey(FeeDescription, on_delete= models.SET_NULL, null=True)
+    outstanding_bill = models.IntegerField(blank=True, null=True)
+    payers_first_name = models.CharField(max_length= 100, null=True)
+    payers_last_name = models.CharField(max_length= 100, null=True)
+    contact = models.CharField(max_length= 100, null=True)
+    email_address = models.EmailField(max_length= 500, null=True)
+    remarks = models.CharField(max_length= 100, null=True)
+    user_type = models.CharField(max_length= 100, null=True)
+    renewal_period = models.CharField(max_length=100,  null=True)
+    renewal_bill = models.IntegerField(blank=True, null=True)
+    expiration_bill = models.IntegerField(blank=True, null=True)
+    total_amount_due = models.IntegerField(blank=True, null=True)
+    amount_paid = models.IntegerField(blank=True, null=True)
+    payment_status = models.CharField(max_length=100, null=True)
+    arrears = models.IntegerField(blank=True, null=True)
+    end_date =  models.DateField(blank=True, null=True, default=timezone.now)
+    date_created = models.DateTimeField(auto_now_add= True)
+    invoice_no = models.CharField(max_length=500, default="FMS2022661", null=True, blank=True)
+
+
+    def __str__(self):
+        return f"{self.payers_first_name} {self.payers_last_name} paid for {self.member}-{self.total_amount_due}, {self.payment_status}"

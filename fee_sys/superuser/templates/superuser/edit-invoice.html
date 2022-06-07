@@ -1,0 +1,115 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+
+        <form action="" method="post" id="myFormID" name="myFormName" data-items-url="{% url 'superuser:ajax_load_items' %}" novalidate>
+            {% csrf_token %}
+            {% comment %} <input type='text' name='branch' value="" id="branch" > {% endcomment %}
+
+            <select id="branch" name="branch" required >
+                <option selected>Branch</option>
+                {% for branch in branches %}
+                   {% if branch.name == invoice.branch %}
+                <option selected="selected" value="{{ invoice.branch }}" id="{{ branch.id }}">{{ invoice.branch }}</option>
+                    {% else %}
+                <option value="{{ branch.name }}" id="{{ branch.id }}">{{ branch.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+<br>
+            <select id="member_category" name="member_category" required >
+              <option selected>Member Category</option>
+              {% for member_category in member_categories %}
+                {% if member_category.category == invoice.member_category %}
+                <option selected="selected" value="{{ invoice.member_category }}" id="{{ member_category.id }}">{{ invoice.member_category }}</option>
+                {% else %}
+                <option value="{{ member_category.category }}" id="{{ member_category.id }}">{{ member_category.category }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            <br>
+
+            <select id="group" name="group" required >
+                <option selected>Group</option>
+                {% for group in groups %}
+                    {% if group.group == invoice.group %}
+                    <option selected="selected" value="{{ invoice.group }}" id="{{ group.id }}">{{ invoice.group }}</option>
+                    {% else %}
+                    <option value="{{ group.group }}" id="{{ group.id }}">{{ group.group }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <br>
+            <select id="subgroup" name="subgroup" required >
+                <option selected>Subgroup</option>
+                {% for subgroup in subgroups %}
+                    {% if subgroup.subgroup == invoice.subgroup %}
+                    <option selected="selected" value="{{ invoice.subgroup }}" id="{{ subgroup.id }}">{{ invoice.subgroup }}</option>
+                    {% else %}
+                    <option value="{{ subgroup.subgroup }}" id="{{ subgroup.id }}">{{ subgroup.subgroup }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br>
+
+
+
+            <select id="fee_type" name="fee_type" required >
+            {% for fee_type in fee_type %}
+              {% if fee_type.fee_type == invoice.fee_type %}
+                  <option selected="selected" value="{{ fee_type.id }}" id="{{ fee_type.id }}">{{ invoice.fee_type }}</option>
+              {% else %}
+                  <option value="{{ fee_type.id }}" id="{{ fee_type.id }}">{{ fee_type.fee_type }}</option>
+              {% endif %}
+            {% endfor %}
+            </select>
+            <br>
+
+          <select id="fee_description" name="fee_description">
+            {% for fee_description in fee_description %}
+                {% if fee_description.fee_description == invoice.fee_description %}
+              <option value="{{ fee_description.id }}" >{{ invoice.fee_description }}</option>
+                {% else %}
+              <option value="{{ fee_description.id }}" >{{ fee_description.fee_description }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+<br>
+
+          <label for='fee_items'>Select Fee Items</label>
+          {% for fee_items in invoice.fee_items.all %}
+                <input type="checkbox" class="fee_items" id="fee_type{{forloop.counter}}" name="" value="{{ fee_items.id }}" onchange="checkFunction()" checked>
+                <label for="fee_type">{{ fee_items }}</label>
+            {% comment %} {% else %}
+                <input type="checkbox" class="fee_items" id="fee_type{{forloop.counter}}" name="fee_items[]" value="{{ fee_items.id }}" onchange="checkFunction()">
+                <label for="fee_type">{{ fee_items.fee_items }}</label> {% endcomment %}
+          {% endfor %}
+
+            <br>
+
+            <label for="fee_items">Enter Fee amount</label>
+            {% for fee_items in fee_items %}
+                {% if fee_items.fee_items == invoice.items %}
+            <div id="item_amount{{forloop.counter}}" style="display: none">
+                {% for i in items_amount %}
+            <p>{{ invoice.items }}: <input type="text" class="amount" id="amount{{forloop.counter}}" name="items_amount[]" value="{{ i }}"></p>
+                {% endfor %}      
+            </div>
+                {% else %}
+                <div id="item_amount{{forloop.counter}}" style="display: none">
+                <p>{{ fee_items.fee_items }}: <input type="text" class="amount" id="amount{{forloop.counter}}" name="items_amount[]" ></p>
+                </div>
+                {% endif %}
+            {% endfor %}
+<br>
+       
+            <input type="submit" value="Submit">
+            <br>
+            <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+        </form> 
+
+        
+          {% endblock %}

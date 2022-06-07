@@ -1,0 +1,57 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+<a href="/create-invoice"><button>Add Invoice</button></a>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Branch</th>
+            <th>Member Category</th>
+            <th>Group</th>
+            <th>Subgroup</th>
+            <th>Fee Type</th>
+            <th>Fee Items</th>
+            <th>Total Amount</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for invoice in invoices %}
+        <tr>
+
+            <td>{{invoice.branch}}</td>
+            <td>{{invoice.member_category}}</td>
+            <td>{{invoice.group}}</td>
+            <td>{{invoice.subgroup}}</td>
+            <td>{{invoice.fee_type}}</td>
+            
+            <td>
+             <ul>
+                {% for i in invoice.fee_items.all %}
+                <li>{{i}}</li>
+                {% empty%}
+                <li>None</li>
+                {% endfor %}
+             </ul>
+            </td>
+           
+
+           
+            <td>GHC{{invoice.total_amount}}</td>
+            <td><a href="{% url 'superuser:assignPaymentsDuration' invoice.pk %}"><button type="button">Assign Payer</button></a></td>
+            <td><a href="{% url 'superuser:editInvoice' id=invoice.id %}"><button type="button">Edit</button></a></td>
+            <td><a href="{% url 'superuser:deleteInvoice' id=invoice.id %}"><button type="button">Delete</button></a></td>
+
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    
+{% endblock %}

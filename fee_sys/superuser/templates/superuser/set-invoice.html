@@ -8,37 +8,16 @@
 
        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type='text' name='signers_name' value="" id="signers_name">
-            <input type='file' name='signature' value="" id="signature">
-            <input type='file' name='logo' value="" id="logo">
-            <input type='tel' name='contact' value="" id="contact">
-            <input type='email' name='email' value="" id="email">
-            <input type="submit" value="Submit">
+            <input type='text' name='signers_name' value="" id="signers_name" placeholder="Signers name"><br>
+            <input type='text' name='company_name' value="" id="company_name" placeholder="Company name"><br>
+            <input type='file' name='signature' value="" id="signature"><br>
+            <input type='file' name='logo' value="" id="logo"><br>
+            <input type='tel' name='contact' value="" id="contact" placeholder="Contact"><br>
+            <input type='email' name='email' value="" id="email" placeholder="Email"><br>
+            <input type="submit" value="Submit"><br>
+            <br>
+            <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
         </form> 
-
-
-        {% comment %} <form action="" method="post">
-            <select
-            id="fee_items"
-            name="fee_items"
-            required
-          >
-            <option selected></option>
-            {% for fee_tppe in fee_type %}
-              <option value="{{ fee_type.id }}">{{ fee_type.fee_type }}</option>
-            {% endfor %}
-          </select>
-            <input id="fee_items" type="text" name="fee_items" value="">
-            <input type="submit" value="OK">
-        </form> {% endcomment %}
-
-
-
-        {% comment %} <form action="" method="post">
-            {% csrf_token %}
-            {{ create_items_form }}
-            <input type="submit" value="Submit">
-        </form> {% endcomment %}
 
         
     </body>

@@ -27,3 +27,9 @@ url = subgroup_url
 payload = payload
 headers = headers
 subgroups = requests.request("GET", url, headers=headers, data=payload).json()['data']
+
+# Member request
+url = members_url
+payload = payload
+headers = headers
+members = requests.request("GET", url, headers=headers, data=payload).json()['results']

@@ -1,0 +1,35 @@
+
+
+{% for member in balance %}
+
+<input type="text" id="outstanding_bill" name="outstanding_bill" value="{{ member.total_invoice }}" readonly><br>
+<select id="payment_status" name="payment_status" required class="data" onchange="loadTotal()" >
+    <option selected>Payment Status</option>
+    <option value="part" id="part">Part Payment</option>
+    <option value="full" id="full">Full Payment</option>
+</select>
+
+
+<br>
+{% if member.account_status == "subscriber" %}
+
+<input type="text" id="user_type" name="user_type" value="Subscriber" readonly><br>
+
+<input type="text" id="expiration_bill" name="expiration_bill" value="0" placeholder="....." readonly><br>
+
+<input type="text" id="renewal_duration" name="renewal_duration" value="{{member.install_period}} {{member.install_range}}" readonly><br>
+
+<input type="text" id="renewal_bill" name="renewal_bill" value="{{ member.install_amount }}" readonly><br>
+
+<input type="date" id="end_date" name="end_date" value="{{ member.end_date }}" hidden><br>
+
+{% else %}
+
+<input type="text" id="user_type" name="user_type" value="Non Subscriber" readonly><br>
+
+{% endif %}
+
+<label>Total amount to be paid:</label><input value="" id="total_amount_due" name="total_amount_due" placeholder="Amount to be paid" readonly><br>
+<input type="text" id="amount_paid" name="amount_paid" placeholder="Enter amount" onchange="findArrears()"><br>
+<input type="text" id="arrears" name="arrears" value="" placeholder="Arrears" readonly><br>
+{% endfor %}  

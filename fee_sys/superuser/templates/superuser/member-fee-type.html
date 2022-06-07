@@ -1,0 +1,7 @@
+<select id="fee_type" name="fee_type" required class="data">
+    <option selected>Fee Type</option>
+    {% for fee_type in fee_types %}
+        <option value="{{ fee_type.id }}" id="{{ fee_type.id }}">{{ fee_type.fee_type }}</option>
+    {% endfor %}
+</select>
+<br>

@@ -1,0 +1,23 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <select id="fee_type" name="fee_type" required>
+    {% for fee_type in fee_types %}
+        {% if fee_type.fee_type == fee_item.fee_type %}
+       <option selected="selected" value="{{ fee_type.id }}" required>{{ fee_item.fee_type }}</option>
+       {% else %}
+       <option value="{{ fee_type.id }}" required>{{ fee_type.fee_type }}</option>
+       {% endif %}
+    {% endfor %}
+  </select>
+
+    <input type='text' name='fee_items' value="{{ fee_item.fee_items }}" id="fee_items" required >
+    <input type="submit" value="Submit">
+    <br>
+    <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+</form> 
+    
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+<a href="/make-payment"><button>Make Payment</button></a>
+<a href=""><button>Delete Selected</button></a>
+
+        <form action="" method="get" id="viewPaymentsForm" name="" novalidate>
+            {% csrf_token %}
+
+            {{ payment_filter.form }}
+
+            <input type="submit" value="Search">
+        </form> 
+
+
+        <hr>
+        <hr>
+        <form action="" method="post" id="sendSMSForm" name="" novalidate>
+            {% csrf_token %}
+            <input type="radio" name="sms"><label>Send SMS</label><br>
+            <input type="radio" name="sms"><label>Voice</label><br>
+            <textarea placeholder="Type message here...." name="message"></textarea><br>
+            <label>Attach audio</label><br><input type="file" name="audio_file"><br>
+            <label>Contact:</label><input type="tel" name="contact"><br>
+            <input type="submit" value="Send">
+        </form> 
+        <hr>
+        <hr>
+        <input type="checkbox" name="" id="check_all" onClick="toggle(this)"><label>Check all</label>
+        <button>Delete selected</button>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Order ID</th>
+            <th>Member</th>
+            <th>Details</th>
+            <th>Fee Type</th>
+            <th>Payment Details</th>
+            <th>Created On</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+         {% for payment in payments %}
+        <tr>
+            <td><input type="checkbox" name="foo" id="check{{forloop.counter0}}"></td>
+            <td>{{ payment.invoice_no }}</td>
+
+            <td>
+                <ul>
+                    <li>{{payment.member}}</li>
+                    {% if payment.end_date < today %}
+                    <li>Expired</li>
+                    {% else %}
+                    <li>Active</li>
+                    {% endif %}
+
+                </ul>
+            </td>
+
+            <td>
+                <ul>
+                    <li>Branch: {{payment.branch}}</li>
+                    <li>Member Category: {{payment.member_category}}</li>
+                    <li>Group: {{payment.group}}</li>
+                    <li>Subgroup: {{payment.subgroup}}</li>
+                </ul>
+            </td>
+
+            <td>{{payment.fee_type}}</td>
+
+            <td>
+                <ul>
+                    {% if payment.user_type == 'Subscriber' %}
+                    <li>Account Status: Subscriber </li>
+                    {% else %}
+                    <li>Account Status: Non-Subscriber</li>
+                    {% endif %}
+
+                    <li>Amount Paid: GHC {{payment.amount_paid}}</li>
+                    <li>Arrears: GHC {{payment.arrears}}</li>
+
+                    {% if payment.remarks %}
+                    <li>Remarks: {{payment.remarks}}</li>
+                    {% else %}
+                    <li>Remarks: None</li>
+                    {% endif %}
+                    <li>Account Expiry: {{payment.end_date}}</li>
+
+
+                </ul>
+            </td>
+
+            <td>
+                <ul>
+                    <li> {{payment.date_created}}</li>
+                    <li><button>Send SMS</button></li>
+                </ul>
+            </td>
+
+            {% comment %} <td><button>Download Receipt</button></td> {% endcomment %}
+            <td><a href="{% url 'superuser:invoice_details_view' payment.pk %}"><button type="button">Download</button></a></td>
+
+
+            {% comment %} <td><a href="{% url 'superuser:deletePaymentDuration' id=detail.id %}"><button type="button">Delete</button></a></td> {% endcomment %}
+        </tr>
+       {% endfor %} 
+    </tbody>
+</table>
+<br>
+
+
+{% if payments.has_previous %}  
+<a href="?page=1"> First </a>
+<a href="?page={{ payments.previous_page_number}}"> Previous </a>
+
+{% endif %}  
+
+Page {{ payments.number }} of {{ payments.paginator.num_pages }}
+
+{% if payments.has_next %}  
+<a href="?page={{payments.next_page_number}}"> Next </a>
+<a href="?page={{ payments.paginator.num_pages}}"> Last </a>
+
+{% endif %}  
+
+{% endblock %}

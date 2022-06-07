@@ -1,0 +1,17 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type='text' name='signers_name' value="{{ invoice_detail.signers_name}}" id="signers_name"><br>
+    <input type='file' name='signature' value="{{ invoice_detail.signature }}" id="signature"><br>
+    <input type='file' name='logo' value="{{ invoice_detail.logo }}" id="logo"><br>
+    <input type='tel' name='contact' value="{{ invoice_detail.contact }}" id="contact"><br>
+    <input type='email' name='email' value="{{ invoice_detail.email }}" id="email"><br>
+    <input type="submit" value="Submit">
+    <br>
+    <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+</form> 
+    
+{% endblock %}

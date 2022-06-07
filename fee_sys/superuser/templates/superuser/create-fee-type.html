@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+    </head>
+    <body>
+        <h1>Hello, world</h1>
+
+       <form action="" method="post">
+            {% csrf_token %}
+            <input type='text' name='fee_type' value="" id="fee_type" placeholder="Enter fee type...">
+            <input type="submit" value="Submit"><br>
+            <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+        </form> 
+        
+    </body>
+</html>

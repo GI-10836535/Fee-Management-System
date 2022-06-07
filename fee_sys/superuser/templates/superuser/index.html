@@ -1,0 +1,23 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+<p>Total amount expected: GHc {{ total_invoice }}</p>
+<p>Total amount collected: GHc {{ total_payments }}</p>
+<p>Total amount in arrears: GHc {{ total_arrears }}</p>
+{% comment %} <a href="{% url 'superuser:pdf_view' %}">Print</a> {% endcomment %}
+{% comment %} <a href="{% url 'superuser:pdf_view' %}"><button type="button">Print</button></a>
+<a href="{% url 'superuser:some_view' %}"><button type="button">Prints</button></a> {% endcomment %}
+
+<ul>
+    <li><a href="/view-fee-type">Fee Type</a></li>
+    <li><a href="/view-fee-items">Fee Item</a></li>
+    <li><a href="/view-fee-description">Fee Description</a></li>
+    <li><a href="/view-invoice">Invoice Details</a></li>
+    <li><a href="/view-payment-details">View Assigned Details</a></li>
+    <li><a href="/view-invoice-details">Company Details</a></li>
+    <li><a href="/view-currency">Currency</a></li>
+    <li><a href="/view-payments">View Payments</a></li>
+</ul>
+        
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'superuser/base.html' %}
+ 
+{% block content %}
+
+
+<form action="" method="post" id="makePaymentForm" name="" data-fee-url="{% url 'superuser:ajax_load_fee' %}"  data-balance-url="{% url 'superuser:ajax_load_balance' %}" novalidate>
+    {% csrf_token %}
+    {% comment %} {% comment %} <input type='text' name='branch' value="" id="branch" >  {% endcomment %}
+    <input type="text" id="member" name="member" value="{{ assigned.member }}" readonly><br>
+    <input type="text" id="branch" name="branch" value="{{ assigned.branch }}" readonly><br>
+    <input type="text" id="member_category" name="member_category" value="{{ assigned.member_category }}" readonly><br>
+    <input type="text" id="group" name="group" value="{{ assigned.group }}" readonly><br>
+    <input type="text" id="subgroup" name="subgroup" value="{{ assigned.subgroup }}" readonly><br>
+
+
+  <select id="fee_type" name="fee_type" required class="data">
+        <option value="{{ assigned.fee_type.id }}" id="{{ fee_type.id }}">{{ assigned.fee_type }}</option>
+  </select>
+<br>
+
+    <select id="fee_description" name="fee_description" required class="data">
+          <option value="{{ assigned.fee_description.id }}" id="{{ fee_description.id }}">{{ assigned.fee_description }}</option>
+    </select>
+    <br>
+
+
+
+<input type="text" id="outstanding_bill" name="outstanding_bill" value="{{ assigned.total_invoice }}" readonly><br>
+<select id="payment_status" name="payment_status" required class="data" onchange="loadTotal()" >
+    <option selected>Payment Status</option>
+    <option value="part" id="part">Part Payment</option>
+    <option value="full" id="full">Full Payment</option>
+</select>
+
+
+<br>
+{% if assigned.account_status == "subscriber" %}
+
+<input type="text" id="user_type" name="user_type" value="Subscriber" readonly><br>
+
+<input type="text" id="expiration_bill" name="expiration_bill" value="0" placeholder="....." readonly><br>
+
+<input type="text" id="renewal_duration" name="renewal_duration" value="{{assigned.install_period}} {{assigned.install_range}}" readonly><br>
+
+<input type="text" id="renewal_bill" name="renewal_bill" value="{{ assigned.install_amount }}" readonly><br>
+
+<input type="date" id="end_date" name="end_date" value="{{ assigned.end_date }}" hidden><br>
+
+{% else %}
+
+<input type="text" id="user_type" name="user_type" value="Non Subscriber" readonly><br> 
+
+{% endif %}
+
+<label>Total amount to be paid:</label><input value="" id="total_amount_due" name="total_amount_due" placeholder="Amount to be paid" readonly><br>
+<input type="text" id="amount_paid" name="amount_paid" placeholder="Enter amount" onchange="findArrears()"><br>
+<input type="text" id="arrears" name="arrears" value="" placeholder="Arrears" readonly><br>
+
+     <br/>
+<label>Payers Details</label><br>
+<input type="text" id="payers_first_name" name="payers_first_name" placeholder="First name..."><br>
+<input type="text" id="payers_last_name" name="payers_last_name" placeholder="Last name..."><br>
+
+<label></label>
+<input type="tel" id="contact" name="contact" placeholder="Contact"><br>
+<input type="email" id="email" name="email_address" placeholder="Email"><br>
+<textarea id="remarks" name="remarks" placeholder="Remarks..." ></textarea><br>
+
+
+<button>Pay Offline</button>
+
+</form> 
+
+<button>Pay Online</button>
+<button>Pay Offline</button>
+<button>Pay Service Provider</button>
+
+<p>Send SMS</p>
+
+{% endblock%}
